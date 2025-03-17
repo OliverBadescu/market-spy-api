@@ -2,6 +2,8 @@ package app.MarketSpy.app.users.model;
 
 
 
+import app.MarketSpy.app.products.model.Product;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -73,6 +77,11 @@ public class User implements UserDetails {
             columnDefinition = "TEXT"
     )
     private String phone;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @ToString.Exclude
+    private Set<Product> products = new HashSet<>();
 
 
     @Column(name = "role", nullable = false)
